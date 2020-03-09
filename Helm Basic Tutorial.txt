@@ -1,0 +1,169 @@
+Helm Tutorial:
+==============
+
+- ~/kube/config <=> helm
+- ~/.helm - Helm Configuration
+- ServiceAccount for helm to talk to the cluster
+
+
+Components:
+===========
+
+    - Helm - Binary
+    - Tiller - Pod - Takes care of all Deployment
+    
+Helm:
+=====
+
+    - Deploy packages to cluster
+    - Packages are called charts
+
+Helm commands:
+==============
+
+helm help
+helm install
+helm fetch
+helm list
+helm status
+helm search
+helm repo update
+helm upgrade
+helm rollback
+helm delete --purge
+helm reset  --force
+
+mkdir .kube
+kubectl cluster-info
+kubectl get nodes
+kubectl version --short
+kubectl get all
+
+Download Helm Binary and extract it
+------------------------------------
+
+sudo mv helm /usr/local/bin
+which helm
+helm version --short --client
+
+
+kubectl -n kube-system create serviceaccount tiller
+kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
+kubectl get clusterrolebinding tiller
+
+
+helm init --serviceaccount tiller
+kubectl -n kube-system get pods
+
+
+helm repo list
+helm list
+
+helm search jenkins
+helm inspect jenkins 
+helm fetch stable/jenkins
+
+kubectl -n kube-system get deploy,replicaset,pod,serviceaccount,clusterrolebinding | grep tiller
+
+helm reset
+helm home
+
+kubectl -n kube-system delete rs tiller-deploy
+
+sudo rm -rf /usr/local/bin/tiller
+
+
+Create your first Helm chart
+-----------------------------
+
+helm version --short 
+helm create myapp
+mkdir charts
+cd charts
+mkdir my-nginx
+cd my-nginx
+vi Chart.yaml - Note uppercase letter C
+
+
+apiVersion: v1
+name: my-nginx
+version: 0.1.0
+appVersion: 1.0
+description: My Custom nginx chart
+tillerversion : ">2.14.0"
+
+
+tree
+
+mkdir templates
+kubectl create deploy deploy my-nginx --image nginx
+
+kubectl create deploy my-nginx --image  nginx  --dry-run -o yaml > /charts/my-nginx/templates/deployment.yaml - Creates Deployment file
+
+kubectl delete deploy nginx
+
+kubectl get all
+
+
+helm install --name nginx .
+
+kubectl expose deploy my-nginx --port 80 --dry-run -o yaml > templates/service.yaml
+
+
+helm list
+vi Chart.yaml 
+helm upgrade my-nginx .
+helm rollback my-nginx 1
+helm del --purge my-nginx
+
+
+Deploy helm charts to chart repo and your team start using it
+-------------------------------------------------------------
+
+vi values.yaml
+replicaCount: 1
+service:
+    type: NodePort
+
+
+
+vi/templates/deployment.yaml
+replicas: {{ .Values.deployment }}
+
+helm install --name my-nginx . --set replicaCount=2
+
+helm inspect values . 
+helm upgrade my-nginx . --set replicaCount=2
+
+vi templates/service.yaml
+type: {{ .Values.service.type}}
+
+
+vi Chart.yaml => Change Version
+helm list
+helm upgrade my-nginx .
+helm list
+helm upgrade my-nginx .
+
+
+helm create myapp
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
