@@ -1,7 +1,7 @@
 Helm Tutorial:
 ==============
 
-- ~/kube/config <=> helm
+- ~/.kube/config <=> helm
 - ~/.helm - Helm Configuration
 - ServiceAccount for helm to talk to the cluster
 
