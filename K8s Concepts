@@ -22,6 +22,12 @@ K8s Concepts:
     - Backup and Restore - Taking snapshot of the ETCD Server
     - Switching and Routing
     - DNS Basics
+    - Taints and Tolerations
+    - Node Affinity
+    - Node Selectors
+    - PersistentVolumes
+    - PersistentVolumeClaims
+    
 
 Cluster Networking:
 ===================
