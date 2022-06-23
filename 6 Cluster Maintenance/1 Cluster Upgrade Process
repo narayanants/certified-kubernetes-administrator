@@ -1,4 +1,4 @@
-CLuster Upgrade Process:
+Cluster Upgrade Process:
 ========================
 
     kubectl drain node-1
